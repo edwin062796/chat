@@ -43,8 +43,8 @@ with st.sidebar:
     st.title("ℹ️ Tungkol sa Chatbot")
     st.write("Ito ay isang **simpleng rule-based chatbot** gamit ang Streamlit. Maaari mong gawin ang mga sumusunod:")
     st.markdown("""
-    - 👋 Bati  
-    - 📝 Rehistro ng Programa  
+    - 👋 Pagati  
+    - 📝 Program Registration  
     - 📚 Listahan ng Kurso  
     - 📋 Mga Kinakailangan  
     - 📞 Makipag-ugnayan  
@@ -64,7 +64,7 @@ st.write("Makipag-usap sa chatbot sa pamamagitan ng pag-type o pagpili ng mabili
 # Quick action buttons
 # --------------------------
 col1, col2, col3, col4 = st.columns(4)
-if col1.button("📝 Rehistro ng Programa"):
+if col1.button("📝 Program Registration"):
     st.session_state.last_action = "rehistro"
 if col2.button("📚 Mga Kurso"):
     st.session_state.last_action = "kurso"
