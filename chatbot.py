@@ -10,7 +10,7 @@ def chatbot_response(user_message: str) -> str:
     if user_message in ["hi", "hello", "hey", "start"]:
         return "👋 Hello! How can I help you today?"
 
-    elif "program registration" in user_message or user_message == "1":
+    elif "program registration", "register" in user_message or user_message == "1":
         return "📝 Maaari kang magregister ng TESDA program sa pamamagitan ng Unified TVET Program Registration and Accreditation."
 
     elif "courses" in user_message or user_message == "2":
@@ -55,17 +55,17 @@ with st.sidebar:
 # --------------------------
 # Top title
 # --------------------------
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🤖 Rule-Based Chatbot</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>TESDA Quezon City UTPRAS</h1>", unsafe_allow_html=True)
 st.write("Interact with the chatbot by typing or using quick action buttons below.")
 
 # --------------------------
 # Quick action buttons (safe pattern)
 # --------------------------
 col1, col2, col3 = st.columns(3)
-if col1.button("📝 Create Account"):
-    st.session_state.last_action = "create account"
-if col2.button("📦 Courses"):
-    st.session_state.last_action = "courses"
+if col1.button("📝 Program Registration"):
+    st.session_state.last_action = "register"
+if col2.button("📦 Training Regulations/Competency Standards"):
+    st.session_state.last_action = "training regulation"
 if col3.button("📞 Talk to Agent"):
     st.session_state.last_action = "talk to agent"
 
