@@ -17,7 +17,7 @@ def chatbot_response(user_message: str) -> str:
         return "📚 You can explore the available online courses here: https://e-tesda.gov.ph/course"
 
     elif "contact" in user_message or user_message == "3":
-        return "📞 You can reach us via email at ncr.quezoncity@tesda.gov.ph or call 8353-8161. Our office is open Monday–Friday, 8:00 AM to 5:00 PM except holidays."
+        return "📞 You can reach us via email at **ncr.quezoncity@tesda.gov.ph** or call **8353-8161**. Our office is open Monday–Friday, 8:00 AM to 5:00 PM."
         
     elif "requirements" in user_message or user_message == "4":
         return "📋 You can check the requirements for program registration here: (insert link)."
@@ -30,53 +30,61 @@ def chatbot_response(user_message: str) -> str:
 # --------------------------
 st.set_page_config(page_title="TESDA QC UTPRAS Chatbot", page_icon="🤖", layout="wide")
 
-# Custom CSS for modern look
-st.markdown("""
+# --------------------------
+# Sidebar functions
+# --------------------------
+with st.sidebar:
+    st.title("⚙️ Chatbot Settings")
+
+    # Dark mode toggle
+    dark_mode = st.checkbox("🌙 Enable Dark Mode")
+
+    # Help menu expander
+    with st.expander("❓ Help & Commands"):
+        st.markdown("""
+        - 👋 **Hello** → Start a greeting  
+        - 📝 **Program Registration** → Learn how to register  
+        - 📚 **Courses** → Explore available TESDA courses  
+        - 📋 **Requirements** → View needed documents  
+        - 📞 **Contact Us** → Get TESDA QC details  
+        """)
+
+    # Navigation buttons
+    if st.button("⬆️ Scroll to Top"):
+        st.markdown("<a href='#top'> </a>", unsafe_allow_html=True)
+    if st.button("⬇️ Scroll to Bottom"):
+        st.markdown("<a href='#bottom'> </a>", unsafe_allow_html=True)
+
+    # Reset chat
+    if st.button("🔄 Reset Conversation"):
+        st.session_state.messages = [("Bot", "👋 Hello! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see available options.")]
+        st.session_state.last_action = None
+        st.experimental_rerun()
+
+# --------------------------
+# CSS (Light / Dark theme)
+# --------------------------
+light_css = """
     <style>
-        body {
-            background-color: #f9fafb;
-        }
-        .main-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: #16a34a;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            text-align: center;
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 30px;
-        }
-        .chat-bubble-user {
-            background-color: #DCF8C6;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin: 8px 0;
-            text-align: right;
-            max-width: 75%;
-            margin-left: auto;
-            font-size: 1rem;
-        }
-        .chat-bubble-bot {
-            background-color: #E6E6FA;
-            padding: 12px 16px;
-            border-radius: 20px;
-            margin: 8px 0;
-            text-align: left;
-            max-width: 75%;
-            margin-right: auto;
-            font-size: 1rem;
-        }
-        .quick-buttons button {
-            border-radius: 12px !important;
-            font-size: 0.95rem !important;
-            padding: 8px 14px !important;
-            margin: 4px !important;
-        }
+        body { background-color: #f9fafb; }
+        .main-title { text-align: center; font-size: 2.5rem; color: #16a34a; font-weight: bold; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 30px; }
+        .chat-bubble-user { background-color: #DCF8C6; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: right; max-width: 75%; margin-left: auto; font-size: 1rem; }
+        .chat-bubble-bot { background-color: #E6E6FA; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: left; max-width: 75%; margin-right: auto; font-size: 1rem; }
     </style>
-""", unsafe_allow_html=True)
+"""
+
+dark_css = """
+    <style>
+        body { background-color: #1e1e2f; color: #eee; }
+        .main-title { text-align: center; font-size: 2.5rem; color: #22c55e; font-weight: bold; margin-bottom: 10px; }
+        .subtitle { text-align: center; font-size: 1.1rem; color: #ccc; margin-bottom: 30px; }
+        .chat-bubble-user { background-color: #2a3f2d; color: #e2e2e2; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: right; max-width: 75%; margin-left: auto; font-size: 1rem; }
+        .chat-bubble-bot { background-color: #2f2f4f; color: #e2e2e2; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: left; max-width: 75%; margin-right: auto; font-size: 1rem; }
+    </style>
+"""
+
+st.markdown(dark_css if dark_mode else light_css, unsafe_allow_html=True)
 
 # --------------------------
 # Session state
@@ -88,27 +96,9 @@ if "last_action" not in st.session_state:
     st.session_state.last_action = None
 
 # --------------------------
-# Sidebar
-# --------------------------
-with st.sidebar:
-    st.title("ℹ️ About this Chatbot")
-    st.write("This is a simple **rule-based chatbot** built with Streamlit. You can try the following:")
-    st.markdown("""
-    - 👋 Say hello  
-    - 📝 Program Registration  
-    - 📚 Browse Courses  
-    - 📋 Requirements  
-    - 📞 Contact us  
-    """)
-    if st.button("🔄 Reset Conversation"):
-        st.session_state.messages = [("Bot", "👋 Hello! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see available options.")]
-        st.session_state.last_action = None
-        st.experimental_rerun()
-
-# --------------------------
 # Main title
 # --------------------------
-st.markdown("<div class='main-title'>TESDA Quezon City UTPRAS</div>", unsafe_allow_html=True)
+st.markdown("<div id='top' class='main-title'>TESDA Quezon City UTPRAS</div>", unsafe_allow_html=True)
 st.markdown("<div class='subtitle'>Your assistant for program registration and inquiries</div>", unsafe_allow_html=True)
 
 # --------------------------
@@ -173,3 +163,5 @@ for role, msg in st.session_state.messages:
         st.markdown(f"<div class='chat-bubble-user'>🧑 <b>{role}:</b> {msg}</div>", unsafe_allow_html=True)
     else:
         st.markdown(f"<div class='chat-bubble-bot'>🤖 <b>{role}:</b> {msg}</div>", unsafe_allow_html=True)
+
+st.markdown("<div id='bottom'></div>", unsafe_allow_html=True)
