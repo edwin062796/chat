@@ -17,7 +17,7 @@ def chatbot_response(user_message: str) -> str:
         return "📚 You can explore the available online courses here: https://e-tesda.gov.ph/course"
 
     elif "contact" in user_message or user_message == "3":
-        return "📞 You can reach us via email at **ncr.quezoncity@tesda.gov.ph** or call **8353-8161**. Our office is open Monday–Friday, 8:00 AM to 5:00 PM."
+        return "📞 You can reach us via email at ncr.quezoncity@tesda.gov.ph or call 8353-8161. Our office is open Monday–Friday, 8:00 AM to 5:00 PM except holidays."
         
     elif "requirements" in user_message or user_message == "4":
         return "📋 You can check the requirements for program registration here: (insert link)."
