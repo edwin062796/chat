@@ -2,166 +2,144 @@ import streamlit as st
 import time
 
 # --------------------------
-# Chatbot logic
+# Simple rule-based chatbot function
 # --------------------------
 def chatbot_response(user_message: str) -> str:
     user_message = (user_message or "").lower().strip()
 
     if user_message in ["hi", "hello", "hey", "start"]:
-        return "👋 Hello! How can I assist you today?"
+        return "👋 Hello! How can I help you today?"
 
-    elif "program registration" in user_message or user_message == "1":
-        return "📝 You can register for TESDA programs through the Unified TVET Program Registration and Accreditation System (UTPRAS)."
+    elif "create account" in user_message or user_message == "1":
+        return "📝 You can create an account here: https://e-tesda.gov.ph/login/signup.php"
 
     elif "courses" in user_message or user_message == "2":
-        return "📚 You can explore the available online courses here: https://e-tesda.gov.ph/course"
+        return "📦 Sure! Explore the available courses here: https://e-tesda.gov.ph/course"
 
-    elif "contact" in user_message or user_message == "3":
-        return "📞 You can reach us via email at **ncr.quezoncity@tesda.gov.ph** or call **8353-8161**. Our office is open Monday–Friday, 8:00 AM to 5:00 PM."
-        
-    elif "requirements" in user_message or user_message == "4":
-        return "📋 You can check the requirements for program registration here: (insert link)."
+    elif "talk to agent" in user_message or user_message == "3":
+        return "📞 Okay, I’m connecting you to our human support staff."
 
     else:
-        return "❓ Sorry, I didn’t understand that. Please select an option below or type 'help'."
+        return "❓ Sorry, I didn’t understand that. Please choose an option below or type 'help'."
 
 # --------------------------
-# Page setup
+# Page config and session
 # --------------------------
-st.set_page_config(page_title="TESDA QC UTPRAS Chatbot", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Simple Chatbot", page_icon="🤖", layout="wide")
 
-# --------------------------
-# Sidebar functions
-# --------------------------
-with st.sidebar:
-    st.title("⚙️ Chatbot Settings")
-
-    # Dark mode toggle
-    dark_mode = st.checkbox("🌙 Enable Dark Mode")
-
-    # Help menu expander
-    with st.expander("❓ Help & Commands"):
-        st.markdown("""
-        - 👋 **Hello** → Start a greeting  
-        - 📝 **Program Registration** → Learn how to register  
-        - 📚 **Courses** → Explore available TESDA courses  
-        - 📋 **Requirements** → View needed documents  
-        - 📞 **Contact Us** → Get TESDA QC details  
-        """)
-
-    # Navigation buttons
-    if st.button("⬆️ Scroll to Top"):
-        st.markdown("<a href='#top'> </a>", unsafe_allow_html=True)
-    if st.button("⬇️ Scroll to Bottom"):
-        st.markdown("<a href='#bottom'> </a>", unsafe_allow_html=True)
-
-    # Reset chat
-    if st.button("🔄 Reset Conversation"):
-        st.session_state.messages = [("Bot", "👋 Hello! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see available options.")]
-        st.session_state.last_action = None
-        st.experimental_rerun()
-
-# --------------------------
-# CSS (Light / Dark theme)
-# --------------------------
-light_css = """
-    <style>
-        body { background-color: #f9fafb; }
-        .main-title { text-align: center; font-size: 2.5rem; color: #16a34a; font-weight: bold; margin-bottom: 10px; }
-        .subtitle { text-align: center; font-size: 1.1rem; color: #555; margin-bottom: 30px; }
-        .chat-bubble-user { background-color: #DCF8C6; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: right; max-width: 75%; margin-left: auto; font-size: 1rem; }
-        .chat-bubble-bot { background-color: #E6E6FA; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: left; max-width: 75%; margin-right: auto; font-size: 1rem; }
-    </style>
-"""
-
-dark_css = """
-    <style>
-        body { background-color: #1e1e2f; color: #eee; }
-        .main-title { text-align: center; font-size: 2.5rem; color: #22c55e; font-weight: bold; margin-bottom: 10px; }
-        .subtitle { text-align: center; font-size: 1.1rem; color: #ccc; margin-bottom: 30px; }
-        .chat-bubble-user { background-color: #2a3f2d; color: #e2e2e2; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: right; max-width: 75%; margin-left: auto; font-size: 1rem; }
-        .chat-bubble-bot { background-color: #2f2f4f; color: #e2e2e2; padding: 12px 16px; border-radius: 20px; margin: 8px 0; text-align: left; max-width: 75%; margin-right: auto; font-size: 1rem; }
-    </style>
-"""
-
-st.markdown(dark_css if dark_mode else light_css, unsafe_allow_html=True)
-
-# --------------------------
-# Session state
-# --------------------------
 if "messages" not in st.session_state:
-    st.session_state.messages = [("Bot", "👋 Hello! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see available options.")]
+    # messages is a list of tuples: (role, text)
+    st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Chatbot. Type 'help' to see options.")]
 
+# last_action will hold a quick-action command when a button is clicked
 if "last_action" not in st.session_state:
     st.session_state.last_action = None
 
 # --------------------------
-# Main title
+# Sidebar info + reset
 # --------------------------
-st.markdown("<div id='top' class='main-title'>TESDA Quezon City UTPRAS</div>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>Your assistant for program registration and inquiries</div>", unsafe_allow_html=True)
+with st.sidebar:
+    st.title("ℹ️ About this Chatbot")
+    st.write("This is a simple **rule-based chatbot** built with Streamlit. You can:")
+    st.markdown("""
+    - 👋 Greet the bot  
+    - 📝 Create an account  
+    - 📦 View courses  
+    - 📞 Talk to a human agent  
+    """)
+    if st.button("🔄 Reset Chat"):
+        st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Chatbot. Type 'help' to see options.")]
+        st.session_state.last_action = None
+        st.experimental_rerun()
 
 # --------------------------
-# Quick action buttons
+# Top title
 # --------------------------
-col1, col2, col3, col4 = st.columns(4)
-with col1:
-    if st.button("📝 Program Registration"):
-        st.session_state.last_action = "program registration"
-with col2:
-    if st.button("📚 Courses"):
-        st.session_state.last_action = "courses"
-with col3:
-    if st.button("📋 Requirements"):
-        st.session_state.last_action = "requirements"
-with col4:
-    if st.button("📞 Contact Us"):
-        st.session_state.last_action = "contact"
+st.markdown("<h1 style='text-align: center; color: #4CAF50;'>🤖 Rule-Based Chatbot</h1>", unsafe_allow_html=True)
+st.write("Interact with the chatbot by typing or using quick action buttons below.")
 
 # --------------------------
-# Input handling
+# Quick action buttons (safe pattern)
+# --------------------------
+col1, col2, col3 = st.columns(3)
+if col1.button("📝 Create Account"):
+    st.session_state.last_action = "create account"
+if col2.button("📦 Courses"):
+    st.session_state.last_action = "courses"
+if col3.button("📞 Talk to Agent"):
+    st.session_state.last_action = "talk to agent"
+
+# --------------------------
+# Determine user_input:
+# - priority: last_action (button) -> chat_input (if available) -> text_input fallback
 # --------------------------
 user_input = None
 
+# If a button was clicked (last_action set), consume it exactly once
 if st.session_state.last_action:
     user_input = st.session_state.last_action
+    # clear it immediately so it won't repeat on next run
     st.session_state.last_action = None
 
+# Try to use chat_input (Streamlit >= 1.25). If not available, fall back to text_input.
 try:
+    # chat_input returns a value only when user submits
     if user_input is None:
         chat_in = st.chat_input("Type your message here...")
         if chat_in:
             user_input = chat_in
 except Exception:
+    # fallback to text_input with a session_state key so we can clear it after processing
     if user_input is None:
+        # use a session key so we can reset it safely
         if "typed_value" not in st.session_state:
             st.session_state.typed_value = ""
         typed = st.text_input("Type your message here:", value=st.session_state.typed_value, key="typed_value")
+        # Only process if not empty and not same as last processed (to avoid reprocessing)
         if typed and (len(st.session_state.messages) == 0 or st.session_state.messages[-1] != ("You", typed)):
             user_input = typed
 
 # --------------------------
-# Process chatbot response
+# Process a single user_input (if any)
 # --------------------------
 if user_input:
+    # Append user message
     st.session_state.messages.append(("You", user_input))
+
+    # Simulate typing effect (non-blocking visual)
     with st.spinner("Bot is typing..."):
-        time.sleep(0.7)
+        time.sleep(0.9)
+
+    # Get bot reply
     try:
         bot_reply = chatbot_response(user_input)
     except Exception as e:
-        bot_reply = f"⚠️ An error occurred: {e}"
+        bot_reply = f"⚠️ An internal error occurred while generating a reply: {e}"
+
     st.session_state.messages.append(("Bot", bot_reply))
+
+    # If using the text_input fallback, clear stored value after processing
     if "typed_value" in st.session_state:
         st.session_state.typed_value = ""
 
 # --------------------------
-# Display messages
+# Display conversation safely
 # --------------------------
-for role, msg in st.session_state.messages:
+for entry in st.session_state.messages:
+    # defensive check to avoid unpacking errors
+    if not (isinstance(entry, (list, tuple)) and len(entry) == 2):
+        # skip malformed entries
+        continue
+    role, msg = entry
     if role == "You":
-        st.markdown(f"<div class='chat-bubble-user'>🧑 <b>{role}:</b> {msg}</div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='background-color:#DCF8C6; padding:10px; border-radius:15px; margin:5px; text-align:right;'>"
+            f"🧑 <b>{role}:</b> {msg}</div>",
+            unsafe_allow_html=True,
+        )
     else:
-        st.markdown(f"<div class='chat-bubble-bot'>🤖 <b>{role}:</b> {msg}</div>", unsafe_allow_html=True)
-
-st.markdown("<div id='bottom'></div>", unsafe_allow_html=True)
+        st.markdown(
+            f"<div style='background-color:#E6E6FA; padding:10px; border-radius:15px; margin:5px; text-align:left;'>"
+            f"🤖 <b>{role}:</b> {msg}</div>",
+            unsafe_allow_html=True,
+        )
