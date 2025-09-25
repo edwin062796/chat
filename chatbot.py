@@ -8,7 +8,7 @@ def chatbot_response(user_message: str) -> str:
     user_message = (user_message or "").lower().strip()
 
     if user_message in ["hi", "hello", "hey", "start"]:
-        return "👋 Hello! How can I help you today?"
+        return "👋 Magandang araw, paano ka namin matutulungan?"
 
     elif "program registration" in user_message or user_message == "1":
         return "📝 Maaari kang magregister ng TESDA program sa pamamagitan ng Unified TVET Program Registration and Accreditation."
@@ -17,7 +17,7 @@ def chatbot_response(user_message: str) -> str:
         return "📦 Sure! Explore the available courses here: https://e-tesda.gov.ph/course"
 
     elif "talk to agent" in user_message or user_message == "3":
-        return "📞 Okay, I’m connecting you to our human support staff."
+        return "📞 Maaaring makipag-ugnayan sa amin gamit ang email na ncr.quezoncity@tesda.gov.ph o maaaring tumawag sa 8353-8161. Bukas ang aming opisina mula Lunes hanggang Biyernes mula ika-8 ng umaga hanggang ika-5 ng hapon."
         
     elif "requirements" in user_message or user_message == "4":
         return "Maaaring tingnan ang mga requirements para sa program registration sa link na ito: (insert link)"
@@ -45,10 +45,11 @@ with st.sidebar:
     st.title("ℹ️ Tungkol sa Chatbot")
     st.write("This is a simple **rule-based chatbot** built with Streamlit. You can:")
     st.markdown("""
-    - 👋 Greet the bot  
+    - 👋 Bumati  
     - 📝 Program Registration
     - 📦 Training Regulations/Competency Standards
-    - 📞 Talk to a human agent  
+    - 📦 Requirements
+    - 📞 Makipag-ugnayan 
     """)
     if st.button("🔄 Reset Chat"):
         st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see options.")]
@@ -64,12 +65,14 @@ st.write("Interact with the chatbot by typing or using quick action buttons belo
 # --------------------------
 # Quick action buttons (safe pattern)
 # --------------------------
-col1, col2, col3 = st.columns(3)
+col1, col2, col3, col4 = st.columns(4)
 if col1.button("📝 Program Registration"):
     st.session_state.last_action = "program registration"
 if col2.button("📦 Training Regulations/Competency Standards"):
     st.session_state.last_action = "training regulation"
-if col3.button("📞 Talk to Agent"):
+if col3.button("📦 Requirements"):
+    st.session_state.last_action = "requirements"
+if col4.button("📞 Makipag-ugnayan"):
     st.session_state.last_action = "talk to agent"
 
 # --------------------------
