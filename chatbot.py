@@ -10,7 +10,7 @@ def chatbot_response(user_message: str) -> str:
     if user_message in ["hi", "hello", "hey", "start"]:
         return "👋 Hello! How can I help you today?"
 
-    elif "program registration, register" in user_message or user_message == "1":
+    elif "program registration" in user_message or user_message == "1":
         return "📝 Maaari kang magregister ng TESDA program sa pamamagitan ng Unified TVET Program Registration and Accreditation."
 
     elif "courses" in user_message or user_message == "2":
@@ -18,6 +18,9 @@ def chatbot_response(user_message: str) -> str:
 
     elif "talk to agent" in user_message or user_message == "3":
         return "📞 Okay, I’m connecting you to our human support staff."
+        
+    elif "requirements" in user_message or user_message == "4":
+        return "Maaaring tingnan ang mga requirements para sa program registration sa link na ito: (insert link)"
 
     else:
         return "❓ Sorry, I didn’t understand that. Please choose an option below or type 'help'."
@@ -25,11 +28,11 @@ def chatbot_response(user_message: str) -> str:
 # --------------------------
 # Page config and session
 # --------------------------
-st.set_page_config(page_title="Simple Chatbot", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="Chatbot: TESDA QC UTPRAS", page_icon="🤖", layout="wide")
 
 if "messages" not in st.session_state:
     # messages is a list of tuples: (role, text)
-    st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Chatbot. Type 'help' to see options.")]
+    st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see options.")]
 
 # last_action will hold a quick-action command when a button is clicked
 if "last_action" not in st.session_state:
@@ -39,7 +42,7 @@ if "last_action" not in st.session_state:
 # Sidebar info + reset
 # --------------------------
 with st.sidebar:
-    st.title("ℹ️ About this Chatbot")
+    st.title("ℹ️ Tungkol sa Chatbot")
     st.write("This is a simple **rule-based chatbot** built with Streamlit. You can:")
     st.markdown("""
     - 👋 Greet the bot  
@@ -48,7 +51,7 @@ with st.sidebar:
     - 📞 Talk to a human agent  
     """)
     if st.button("🔄 Reset Chat"):
-        st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Chatbot. Type 'help' to see options.")]
+        st.session_state.messages = [("Bot", "👋 Hi! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see options.")]
         st.session_state.last_action = None
         st.experimental_rerun()
 
@@ -63,7 +66,7 @@ st.write("Interact with the chatbot by typing or using quick action buttons belo
 # --------------------------
 col1, col2, col3 = st.columns(3)
 if col1.button("📝 Program Registration"):
-    st.session_state.last_action = "register"
+    st.session_state.last_action = "program registration"
 if col2.button("📦 Training Regulations/Competency Standards"):
     st.session_state.last_action = "training regulation"
 if col3.button("📞 Talk to Agent"):
