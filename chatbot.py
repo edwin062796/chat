@@ -2,79 +2,134 @@ import streamlit as st
 import time
 
 # --------------------------
-# Simple rule-based chatbot function
+# Chatbot logic
 # --------------------------
 def chatbot_response(user_message: str) -> str:
     user_message = (user_message or "").lower().strip()
 
-    if user_message in ["hi", "hello", "hey", "kumusta", "simula", "umpisa"]:
-        return "👋 Magandang araw! Paano ka namin matutulungan?"
+    if user_message in ["hi", "hello", "hey", "start"]:
+        return "👋 Hello! How can I assist you today?"
 
-    elif "rehistro" in user_message or user_message == "1":
-        return "📝 Maaari kang magparehistro sa TESDA program gamit ang Unified TVET Program Registration and Accreditation System (UTPRAS)."
+    elif "program registration" in user_message or user_message == "1":
+        return "📝 You can register for TESDA programs through the Unified TVET Program Registration and Accreditation System (UTPRAS)."
 
-    elif "kurso" in user_message or user_message == "2":
-        return "📚 Narito ang listahan ng mga kurso na maaari mong tuklasin: https://e-tesda.gov.ph/course"
+    elif "courses" in user_message or user_message == "2":
+        return "📚 You can explore the available online courses here: https://e-tesda.gov.ph/course"
 
-    elif "kausapin" in user_message or user_message == "3":
-        return "📞 Maaari kang makipag-ugnayan sa amin sa pamamagitan ng email: ncr.quezoncity@tesda.gov.ph o tumawag sa 8353-8161. Bukas ang aming opisina Lunes–Biyernes, 8:00 AM – 5:00 PM."
+    elif "contact" in user_message or user_message == "3":
+        return "📞 You can reach us via email at **ncr.quezoncity@tesda.gov.ph** or call **8353-8161**. Our office is open Monday–Friday, 8:00 AM to 5:00 PM."
         
-    elif "requirements" in user_message or "pangailangan" in user_message or user_message == "4":
-        return "📋 Maaari mong tingnan ang mga kinakailangan para sa program registration dito: (ilagay ang link)."
+    elif "requirements" in user_message or user_message == "4":
+        return "📋 You can check the requirements for program registration here: (insert link)."
 
     else:
-        return "❓ Paumanhin, hindi ko naintindihan ang iyong mensahe. Pumili sa mga opsyon sa ibaba o i-type ang 'tulong'."
+        return "❓ Sorry, I didn’t understand that. Please select an option below or type 'help'."
 
 # --------------------------
-# Page config and session
+# Page setup
 # --------------------------
-st.set_page_config(page_title="Chatbot: TESDA QC UTPRAS", page_icon="🤖", layout="wide")
+st.set_page_config(page_title="TESDA QC UTPRAS Chatbot", page_icon="🤖", layout="wide")
 
+# Custom CSS for modern look
+st.markdown("""
+    <style>
+        body {
+            background-color: #f9fafb;
+        }
+        .main-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #16a34a;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 30px;
+        }
+        .chat-bubble-user {
+            background-color: #DCF8C6;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin: 8px 0;
+            text-align: right;
+            max-width: 75%;
+            margin-left: auto;
+            font-size: 1rem;
+        }
+        .chat-bubble-bot {
+            background-color: #E6E6FA;
+            padding: 12px 16px;
+            border-radius: 20px;
+            margin: 8px 0;
+            text-align: left;
+            max-width: 75%;
+            margin-right: auto;
+            font-size: 1rem;
+        }
+        .quick-buttons button {
+            border-radius: 12px !important;
+            font-size: 0.95rem !important;
+            padding: 8px 14px !important;
+            margin: 4px !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
+
+# --------------------------
+# Session state
+# --------------------------
 if "messages" not in st.session_state:
-    st.session_state.messages = [("Bot", "👋 Kumusta! Maligayang pagdating sa TESDA Quezon City UTPRAS Chatbot. I-type ang 'tulong' upang makita ang mga opsyon.")]
+    st.session_state.messages = [("Bot", "👋 Hello! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see available options.")]
 
 if "last_action" not in st.session_state:
     st.session_state.last_action = None
 
 # --------------------------
-# Sidebar info + reset
+# Sidebar
 # --------------------------
 with st.sidebar:
-    st.title("ℹ️ Tungkol sa Chatbot")
-    st.write("Ito ay isang **simpleng rule-based chatbot** gamit ang Streamlit. Maaari mong gawin ang mga sumusunod:")
+    st.title("ℹ️ About this Chatbot")
+    st.write("This is a simple **rule-based chatbot** built with Streamlit. You can try the following:")
     st.markdown("""
-    - 👋 Pagati  
+    - 👋 Say hello  
     - 📝 Program Registration  
-    - 📚 Listahan ng Kurso  
-    - 📋 Mga Kinakailangan  
-    - 📞 Makipag-ugnayan  
+    - 📚 Browse Courses  
+    - 📋 Requirements  
+    - 📞 Contact us  
     """)
-    if st.button("🔄 I-reset ang Chat"):
-        st.session_state.messages = [("Bot", "👋 Kumusta! Maligayang pagdating sa TESDA Quezon City UTPRAS Chatbot. I-type ang 'tulong' upang makita ang mga opsyon.")]
+    if st.button("🔄 Reset Conversation"):
+        st.session_state.messages = [("Bot", "👋 Hello! Welcome to TESDA Quezon City UTPRAS Chatbot. Type 'help' to see available options.")]
         st.session_state.last_action = None
         st.experimental_rerun()
 
 # --------------------------
-# Title
+# Main title
 # --------------------------
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>TESDA Quezon City UTPRAS</h1>", unsafe_allow_html=True)
-st.write("Makipag-usap sa chatbot sa pamamagitan ng pag-type o pagpili ng mabilis na opsyon sa ibaba.")
+st.markdown("<div class='main-title'>TESDA Quezon City UTPRAS</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Your assistant for program registration and inquiries</div>", unsafe_allow_html=True)
 
 # --------------------------
 # Quick action buttons
 # --------------------------
 col1, col2, col3, col4 = st.columns(4)
-if col1.button("📝 Program Registration"):
-    st.session_state.last_action = "rehistro"
-if col2.button("📚 Mga Kurso"):
-    st.session_state.last_action = "kurso"
-if col3.button("📋 Mga Kinakailangan"):
-    st.session_state.last_action = "pangailangan"
-if col4.button("📞 Makipag-ugnayan"):
-    st.session_state.last_action = "kausapin"
+with col1:
+    if st.button("📝 Program Registration"):
+        st.session_state.last_action = "program registration"
+with col2:
+    if st.button("📚 Courses"):
+        st.session_state.last_action = "courses"
+with col3:
+    if st.button("📋 Requirements"):
+        st.session_state.last_action = "requirements"
+with col4:
+    if st.button("📞 Contact Us"):
+        st.session_state.last_action = "contact"
 
 # --------------------------
-# Determine user input
+# Input handling
 # --------------------------
 user_input = None
 
@@ -84,45 +139,37 @@ if st.session_state.last_action:
 
 try:
     if user_input is None:
-        chat_in = st.chat_input("I-type ang iyong mensahe dito...")
+        chat_in = st.chat_input("Type your message here...")
         if chat_in:
             user_input = chat_in
 except Exception:
     if user_input is None:
         if "typed_value" not in st.session_state:
             st.session_state.typed_value = ""
-        typed = st.text_input("I-type ang iyong mensahe dito:", value=st.session_state.typed_value, key="typed_value")
-        if typed and (len(st.session_state.messages) == 0 or st.session_state.messages[-1] != ("Ikaw", typed)):
+        typed = st.text_input("Type your message here:", value=st.session_state.typed_value, key="typed_value")
+        if typed and (len(st.session_state.messages) == 0 or st.session_state.messages[-1] != ("You", typed)):
             user_input = typed
 
 # --------------------------
-# Process input
+# Process chatbot response
 # --------------------------
 if user_input:
-    st.session_state.messages.append(("Ikaw", user_input))
-    with st.spinner("Nag-iisip si Bot..."):
-        time.sleep(0.9)
+    st.session_state.messages.append(("You", user_input))
+    with st.spinner("Bot is typing..."):
+        time.sleep(0.7)
     try:
         bot_reply = chatbot_response(user_input)
     except Exception as e:
-        bot_reply = f"⚠️ Nagkaroon ng error: {e}"
+        bot_reply = f"⚠️ An error occurred: {e}"
     st.session_state.messages.append(("Bot", bot_reply))
     if "typed_value" in st.session_state:
         st.session_state.typed_value = ""
 
 # --------------------------
-# Display conversation
+# Display messages
 # --------------------------
 for role, msg in st.session_state.messages:
-    if role == "Ikaw":
-        st.markdown(
-            f"<div style='background-color:#DCF8C6; padding:10px; border-radius:15px; margin:5px; text-align:right;'>"
-            f"🧑 <b>{role}:</b> {msg}</div>",
-            unsafe_allow_html=True,
-        )
+    if role == "You":
+        st.markdown(f"<div class='chat-bubble-user'>🧑 <b>{role}:</b> {msg}</div>", unsafe_allow_html=True)
     else:
-        st.markdown(
-            f"<div style='background-color:#E6E6FA; padding:10px; border-radius:15px; margin:5px; text-align:left;'>"
-            f"🤖 <b>{role}:</b> {msg}</div>",
-            unsafe_allow_html=True,
-        )
+        st.markdown(f"<div class='chat-bubble-bot'>🤖 <b>{role}:</b> {msg}</div>", unsafe_allow_html=True)
