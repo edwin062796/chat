@@ -43,8 +43,8 @@ with st.sidebar:
     st.write("This is a simple **rule-based chatbot** built with Streamlit. You can:")
     st.markdown("""
     - 👋 Greet the bot  
-    - 📝 Create an account  
-    - 📦 View courses  
+    - 📝 Program Registration
+    - 📦 Training Regulations/Competency Standards
     - 📞 Talk to a human agent  
     """)
     if st.button("🔄 Reset Chat"):
