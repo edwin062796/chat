@@ -10,8 +10,8 @@ def chatbot_response(user_message: str) -> str:
     if user_message in ["hi", "hello", "hey", "start"]:
         return "👋 Hello! How can I help you today?"
 
-    elif "create account" in user_message or user_message == "1":
-        return "📝 You can create an account here: https://e-tesda.gov.ph/login/signup.php"
+    elif "program registration" in user_message or user_message == "1":
+        return "📝 Maaari kang magregister ng TESDA program sa pamamagitan ng Unified TVET Program Registration and Accreditation."
 
     elif "courses" in user_message or user_message == "2":
         return "📦 Sure! Explore the available courses here: https://e-tesda.gov.ph/course"
